@@ -1,0 +1,128 @@
+<p-toast position="top-right"></p-toast>
+<div class="row">
+  <div class="col-xl-12">
+    <div class="table-responsive">
+      <div class="card">
+        <p-table #dt [value]="staffs" [rows]="5" [paginator]="true"
+                 [globalFilterFields]="['firstName','lastName','job','team.name']"
+                 responsiveLayout="scroll"
+                 [rowHover]="true" dataKey="id"
+                 currentPageReportTemplate="Affichage de {first} à {last} de {totalRecords} utilisateurs"
+                 [showCurrentPageReport]="true">
+          <ng-template pTemplate="caption">
+            <div class="flex align-items-center justify-content-between">
+              <div class="m-0">
+                <button pButton pRipple label="Ajouter" icon="pi pi-plus" class="p-button-success mr-2"
+                        (click)="addStaff()" ></button>
+              </div>
+              <span class="p-input-icon-left"> <i class="pi pi-search"></i>
+                <input pInputText type="text" placeholder="Search..." lazy="false"
+                       (input)="dt.filterGlobal($any($event.target).value, 'contains')"/>
+              </span>
+            </div>
+          </ng-template>
+          <ng-template pTemplate="header">
+            <tr>
+              <th pSortableColumn="firstName">First Name
+                <p-sortIcon field="firstName"></p-sortIcon>
+              </th>
+              <th pSortableColumn="lastName">Last Name
+                <p-sortIcon field="lastName"></p-sortIcon>
+              </th>
+              <th pSortableColumn="job">Job
+                <p-sortIcon field="job"></p-sortIcon>
+              </th>
+              <th pSortableColumn="team">Team
+                <p-sortIcon field="team"></p-sortIcon>
+              </th>
+              <th style="width: 132px;"></th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-staff>
+            <tr>
+              <td>{{staff.firstName}}</td>
+              <td>{{staff.lastName}}</td>
+              <td>{{staff.job}}</td>
+
+              <td>{{ staff.team.name}} </td>
+              <td>
+                <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2"
+                        (click)="editStaff(staff)"></button>
+                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger"
+                        (click)="deleteStaff(staff)"></button>
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </div>
+    <p-confirmDialog [style]="{width: '450px',height:'200px',textAlign:'center'}"></p-confirmDialog>
+  </div>
+
+
+  <p-dialog [style]="{width: '50vw'}" [(visible)]="displayEdit || displayAdd" [maximizable]="true" [header]=title
+            [modal]="true"
+            styleClass="p-fluid">
+    <ng-template pTemplate="content">
+      <form class="example"  [formGroup]="StaffGroup">
+        <div class="container-fluid default-autocomplete default-mt-input">
+          <div class="row">
+            <div class="col-sm-4">
+              <mat-form-field class="example-full-width">
+                <mat-label>first Name</mat-label>
+                <input matInput
+                       formControlName="firstNameControl">
+              </mat-form-field>
+            </div>
+            <div class="col-sm-4">
+              <mat-form-field class="example-full-width">
+                <mat-label>Last Name</mat-label>
+                <input matInput
+                       formControlName="lastNameControl">
+              </mat-form-field>
+            </div>
+            <div class="col-sm-4">
+              <mat-form-field class="example-full-width">
+                <mat-label>Position</mat-label>
+                <input matInput
+                       formControlName="jobControl">
+
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="row">
+
+            <div class="col-sm-6">
+              <mat-form-field *ngIf="displayEdit"class="example-full-width">
+                <mat-label>Team</mat-label>
+                <mat-select [(ngModel)]="staff!.team" formControlName="teamControl" [compareWith]="comparer" size="1">
+                  <mat-option
+                    *ngFor="let team of teams" [value]="team">{{team.name}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field *ngIf="displayAdd"class="example-full-width">
+                <mat-label>Team</mat-label>
+                <mat-select formControlName="teamControl" >
+                  <mat-option
+                    *ngFor="let team of teams" [value]="team">{{team.name}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+
+        </div>
+      </form>
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+      <button  *ngIf="displayEdit"  pButton label="Cancel" icon="pi pi-times" class="p-button-edit-model p-button-text"
+               (click)="displayEdit=false"></button>
+      <button  *ngIf="displayEdit"  pButton label="Save" icon="pi pi-check" class="p-button-edit-model p-button-text"
+               (click)="saveEditStaff(staff)"></button>
+      <button  *ngIf="displayAdd" pButton label="Cancel" icon="pi pi-times" class="p-button-edit-model p-button-text"
+               (click)="displayAdd=false"></button>
+      <button  *ngIf="displayAdd" pButton label="Save" icon="pi pi-check" class="p-button-edit-model p-button-text"
+               (click)="saveNewStaff()"></button>
+    </ng-template>
+  </p-dialog>
+</div>
