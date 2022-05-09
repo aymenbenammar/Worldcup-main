@@ -13,8 +13,8 @@ import java.util.List;
 @RequestMapping("/teams")
 @RequiredArgsConstructor
 public class TeamController {
-@Autowired
-    private TeamService teamService;
+
+    private final TeamService teamService;
 
     @GetMapping
     public List<TeamDto> getAllTeams() {

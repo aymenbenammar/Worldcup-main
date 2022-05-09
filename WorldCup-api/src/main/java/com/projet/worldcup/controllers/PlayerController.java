@@ -12,8 +12,8 @@ import java.util.List;
 @RequestMapping("/players")
 @RequiredArgsConstructor
 public class PlayerController {
-    @Autowired
-    private PlayerService playerService;
+
+    private final PlayerService playerService;
 
     @GetMapping
     public List<PlayerDto> getAllPlayers() {

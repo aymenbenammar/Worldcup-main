@@ -11,6 +11,4 @@ import java.util.List;
 
 @Repository
 public interface TeamRepository extends JpaRepository<Team, Long> {
-    @Query(value = "SELECT * FROM team u", nativeQuery = true)
-    List<TeamDto> getAllTeams();
 }

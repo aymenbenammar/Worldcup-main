@@ -12,7 +12,7 @@ import {PlayersComponent} from "./players/players.component";
 import {StaffComponent} from "./staff/staff.component";
 
 const routes: Routes = [
-  {path: '', redirectTo: 'admin', pathMatch: 'full'},
+  {path: '', redirectTo: 'admin/users', pathMatch: 'full'},
   { path: 'login', component: LoginComponent, canActivate: [LoginGuardService]},
 
   { path: 'admin', component: LayoutsComponent, canActivate: [AuthGuard], children: [
